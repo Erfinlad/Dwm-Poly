@@ -11,8 +11,7 @@ static int topbar = 1;  /* 0 means bottom bar */
 static const int usealtbar = 1;             /* 1 means use non-dwm status bar */
 static const char *altbarclass = "Polybar"; /* Alternate bar class name */
 static const char *alttrayname = "tray";    /* Polybar tray instance name */
-static const char *altbarcmd =
-    "$HOME/.config/polybar/polylaunch.sh"; /* Alternate bar launch command */
+static const char *altbarcmd = "$HOME/.config/polybar/polylaunch.sh"; /* Alternate bar launch command */
 
 static char font[] = "monospace:size 10";
 static char dmenufont[] = "monospace:size 10";
@@ -62,7 +61,8 @@ static const Rule rules[] = {
     /* class      instance    title       tags mask     isfloating   monitor */
     {"Gimp", NULL, NULL, 1 << 4, 1, 0, -1},
     {"Firefox", NULL, NULL, 1 << 3, 1, 0, -1},
-    {"LunarVim", NULL, NULL, 1 << 2, 1, 0, -1},
+    {"Chromium", NULL, NULL, 0, 1, 1, -1},
+    {"Neovim", NULL, NULL, 1 << 2, 1, 0, -1},
     {"Joplin", NULL, NULL, 1, 1, 1, -1}};
 
 /* layout(s) */
@@ -106,10 +106,11 @@ static const char *clipmenucmd[] = {"clipmenu",     "-fn", dmenufont,     "-nb",
                                     selbordercolor, "-sf", selfgcolor,    NULL};
 static const char *firefox[] = {"firefox", "--new-tab", NULL};
 static const char *termcmd[] = {"alacritty", NULL};
-static const char *lvimide[] = {"alacritty", "--class", "LunarVim,LunarVim",
-                                "-e",        "lvim",    NULL};
+static const char *nvimide[] = {"alacritty", "--class", "Neovim,Neovim",
+                                "-e",        "nvim",    NULL};
 static const char *jopnotes[] = {"alacritty", "--class", "Joplin,Joplin",
                                  "-e",        "joplin",  NULL};
+static const char *sleepcmd[] = {"sudo", "zzz", "-z", NULL};
 
 ResourcePref resources[] = {
     {"font", STRING, &font},
@@ -138,7 +139,7 @@ static Key keys[] = {
     {MODKEY, XK_space, spawn, {.v = dmenucmd}},
     {MODKEY | ShiftMask, XK_c, spawn, {.v = clipmenucmd}},
     {MODKEY, XK_b, spawn, {.v = firefox}},
-    {MODKEY, XK_l, spawn, {.v = lvimide}},
+    {MODKEY, XK_l, spawn, {.v = nvimide}},
     {MODKEY | ShiftMask, XK_j, spawn, {.v = jopnotes}},
 
     // Move Windows
@@ -163,11 +164,12 @@ static Key keys[] = {
     {MODKEY, XK_v, tagmon, {.i = +1}},
 
     // Etc
-    {MODKEY | ShiftMask, XK_u, togglefloating, {0}},
+    {MODKEY | ControlMask, XK_u, togglefloating, {0}},
     {MODKEY | ShiftMask, XK_b, togglebar, {0}},
     {MODKEY, XK_comma, killclient, {0}},
     {MODKEY, XK_semicolon, quit, {1}},
     {MODKEY, XK_p, quit, {0}},
+    {MODKEY | ShiftMask, XK_semicolon, spawn, {.v = sleepcmd}},
 
     // Workspaces
     TAGKEYS(XK_ampersand, 0) TAGKEYS(XK_bracketleft, 1) TAGKEYS(XK_braceleft, 2)
