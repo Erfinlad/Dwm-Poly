@@ -1,5 +1,5 @@
 /* See LICENSE file for copyright and license details. */
-
+#include <X11/XF86keysym.h>
 /* appearance */
 static unsigned int borderpx = 2; /* border pixel of windows */
 static unsigned int gappx = 0;    /* gap size */
@@ -60,7 +60,7 @@ static const Rule rules[] = {
      */
     /* class      instance    title       tags mask     isfloating   monitor */
     {"Gimp", NULL, NULL, 1 << 4, 1, 0, -1},
-    {"Firefox", NULL, NULL, 1 << 3, 1, 0, -1},
+    {"firefox", NULL, NULL, 1 << 3, 1, 0, -1},
     {"Chromium", NULL, NULL, 0, 1, 1, -1},
     {"Neovim", NULL, NULL, 1 << 2, 1, 0, -1},
     {"Joplin", NULL, NULL, 1, 1, 1, -1}};
@@ -104,13 +104,18 @@ static const char *dmenucmd[] = {"dmenu_run",   "-m",  dmenumon,       "-fn",
 static const char *clipmenucmd[] = {"clipmenu",     "-fn", dmenufont,     "-nb",
                                     normalbgcolor,  "-nf", normalfgcolor, "-sb",
                                     selbordercolor, "-sf", selfgcolor,    NULL};
-static const char *firefox[] = {"firefox", "--new-tab", NULL};
+static const char *firefox[] = {"firefox-bin", "--new-tab", NULL};
 static const char *termcmd[] = {"alacritty", NULL};
 static const char *nvimide[] = {"alacritty", "--class", "Neovim,Neovim",
                                 "-e",        "nvim",    NULL};
 static const char *jopnotes[] = {"alacritty", "--class", "Joplin,Joplin",
                                  "-e",        "joplin",  NULL};
-static const char *sleepcmd[] = {"sudo", "zzz", "-z", NULL};
+static const char *sleepcmd[] = {"loginctl", "suspend", NULL};
+static const char *audioup[] = {"amixer", "set", "Master", "2%+", NULL};
+static const char *audiodown[] = {"amixer", "set", "Master", "2%-", NULL};
+static const char *brightup[] = {"xbacklight", "-inc", "5", NULL};
+static const char *brightdown[] = {"xbacklight", "-dec", "5", NULL};
+static const char *stcmd[] = {"st", NULL};
 
 ResourcePref resources[] = {
     {"font", STRING, &font},
@@ -163,13 +168,19 @@ static Key keys[] = {
     {MODKEY, XK_w, tagmon, {.i = -1}},
     {MODKEY, XK_v, tagmon, {.i = +1}},
 
+    // Legacy keys
+    {0, XF86XK_AudioRaiseVolume, spawn, {.v = audioup}},
+    {0, XF86XK_AudioLowerVolume, spawn, {.v = audiodown}},
+    {0, XF86XK_MonBrightnessUp, spawn, {.v = brightup}},
+    {0, XF86XK_MonBrightnessDown, spawn, {.v = brightdown}},
+
     // Etc
     {MODKEY | ControlMask, XK_u, togglefloating, {0}},
     {MODKEY | ShiftMask, XK_b, togglebar, {0}},
     {MODKEY, XK_comma, killclient, {0}},
     {MODKEY, XK_semicolon, quit, {1}},
     {MODKEY, XK_p, quit, {0}},
-    {MODKEY | ShiftMask, XK_semicolon, spawn, {.v = sleepcmd}},
+    {MODKEY | ControlMask, XK_semicolon, spawn, {.v = sleepcmd}},
 
     // Workspaces
     TAGKEYS(XK_ampersand, 0) TAGKEYS(XK_bracketleft, 1) TAGKEYS(XK_braceleft, 2)
