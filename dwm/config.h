@@ -42,7 +42,7 @@ static const char *barcolors[] = {
 };
 
 /* tagging */
-static const char *tags[] = {"", "", "", "", "", "", "", "", "", ""};
+static const char *tags[] = {"", "", "", "", "", "", "", "", ""};
 
 static const unsigned int ulinepad =
     0; /* horizontal padding between the underline and tag */
@@ -60,10 +60,11 @@ static const Rule rules[] = {
      */
     /* class      instance    title       tags mask     isfloating   monitor */
     {"Gimp", NULL, NULL, 1 << 4, 1, 0, -1},
-    {"firefox", NULL, NULL, 1 << 3, 1, 0, -1},
-    {"Chromium", NULL, NULL, 0, 1, 1, -1},
+    {"Firefox", NULL, NULL, 1 << 3, 1, 0, -1},
+    {"chromium", NULL, NULL, 0, 1, 0, -1},
     {"Neovim", NULL, NULL, 1 << 2, 1, 0, -1},
-    {"Joplin", NULL, NULL, 1, 1, 1, -1}};
+    {"thunar", NULL, NULL, 0, 1, 1, -1},
+};
 
 /* layout(s) */
 static float mfact = 0.55;  /* factor of master area size [0.05..0.95] */
@@ -104,7 +105,7 @@ static const char *dmenucmd[] = {"dmenu_run",   "-m",  dmenumon,       "-fn",
 static const char *clipmenucmd[] = {"clipmenu",     "-fn", dmenufont,     "-nb",
                                     normalbgcolor,  "-nf", normalfgcolor, "-sb",
                                     selbordercolor, "-sf", selfgcolor,    NULL};
-static const char *firefox[] = {"firefox-bin", "--new-tab", NULL};
+static const char *firefox[] = {"firefox", "--new-tab", NULL};
 static const char *termcmd[] = {"alacritty", NULL};
 static const char *nvimide[] = {"alacritty", "--class", "Neovim,Neovim",
                                 "-e",        "nvim",    NULL};
@@ -146,6 +147,10 @@ static Key keys[] = {
     {MODKEY, XK_b, spawn, {.v = firefox}},
     {MODKEY, XK_l, spawn, {.v = nvimide}},
     {MODKEY | ShiftMask, XK_j, spawn, {.v = jopnotes}},
+
+    // Switch layout
+    {MODKEY,  XK_m, setltor1, {.v = &layouts[0]}},
+    {MODKEY|ShiftMask,  XK_m, setltor1, {.v = &layouts[1]}},
 
     // Move Windows
     {MODKEY, XK_c, rotatestack, {.i = +1}},
