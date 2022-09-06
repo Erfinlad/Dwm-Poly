@@ -42,7 +42,7 @@ static const char *barcolors[] = {
 };
 
 /* tagging */
-static const char *tags[] = {"", "", "", "", "", "", "", "", ""};
+static const char *tags[] = {"レ", "コ", "エ", "ル", "フ", "ィ", "ン", "ラ", "ッ", "ド"};
 
 static const unsigned int ulinepad =
     0; /* horizontal padding between the underline and tag */
@@ -75,9 +75,9 @@ static const int lockfullscreen =
 
 static const Layout layouts[] = {
     /* symbol     arrange function */
-    {"[]=", tile}, /* first entry is default */
-    {"><>", NULL}, /* no layout function means floating behavior */
-    {"[M]", monocle},
+    {"一", tile}, /* first entry is default */
+    {"二", NULL}, /* no layout function means floating behavior */
+    {"三", monocle},
 };
 
 /* key definitions */
@@ -107,16 +107,13 @@ static const char *clipmenucmd[] = {"clipmenu",     "-fn", dmenufont,     "-nb",
                                     selbordercolor, "-sf", selfgcolor,    NULL};
 static const char *firefox[] = {"firefox", "--new-tab", NULL};
 static const char *termcmd[] = {"alacritty", NULL};
-static const char *nvimide[] = {"alacritty", "--class", "Neovim,Neovim",
-                                "-e",        "nvim",    NULL};
-static const char *jopnotes[] = {"alacritty", "--class", "Joplin,Joplin",
-                                 "-e",        "joplin",  NULL};
 static const char *sleepcmd[] = {"loginctl", "suspend", NULL};
 static const char *audioup[] = {"amixer", "set", "Master", "2%+", NULL};
 static const char *audiodown[] = {"amixer", "set", "Master", "2%-", NULL};
 static const char *brightup[] = {"xbacklight", "-inc", "5", NULL};
 static const char *brightdown[] = {"xbacklight", "-dec", "5", NULL};
 static const char *stcmd[] = {"st", NULL};
+static const char *thunarcmd[] = {"thunar", NULL};
 
 ResourcePref resources[] = {
     {"font", STRING, &font},
@@ -145,16 +142,20 @@ static Key keys[] = {
     {MODKEY, XK_space, spawn, {.v = dmenucmd}},
     {MODKEY | ShiftMask, XK_c, spawn, {.v = clipmenucmd}},
     {MODKEY, XK_b, spawn, {.v = firefox}},
-    {MODKEY, XK_l, spawn, {.v = nvimide}},
-    {MODKEY | ShiftMask, XK_j, spawn, {.v = jopnotes}},
+    {MODKEY | ShiftMask, XK_f, spawn, {.v = thunarcmd}},
 
-    // Switch layout
-    {MODKEY,  XK_m, setltor1, {.v = &layouts[0]}},
-    {MODKEY|ShiftMask,  XK_m, setltor1, {.v = &layouts[1]}},
+    // Cycle through tags
+    {MODKEY,  XK_Tab, shiftview, {.i = +1}},
+    {MODKEY | ShiftMask,  XK_Tab, shiftview, {.i = -1}},
 
     // Move Windows
     {MODKEY, XK_c, rotatestack, {.i = +1}},
     {MODKEY, XK_t, rotatestack, {.i = -1}},
+    
+    // Swich Layouts
+    {MODKEY | ControlMask,  XK_w, setlayout,  {.v = &layouts[0]}},
+    {MODKEY | ControlMask,  XK_v, setlayout,  {.v = &layouts[1]}},
+    {MODKEY | ControlMask,  XK_m, setlayout,  {.v = &layouts[2]}},
 
     // Switch Windows
     {MODKEY, XK_h, focusstack, {.i = +1}},
